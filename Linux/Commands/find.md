@@ -28,6 +28,11 @@ $ find . -size +10M
 $ find . -type f
 ```
 
+##### Find file with specific Extension
+```
+$ find . -type f -name "*.apk"
+```
+
 ##### Find file by Time
 * Modified within 1 day
   ```

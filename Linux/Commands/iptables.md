@@ -88,8 +88,38 @@ Outbound UDP Flood protection in a user defined chain
 # iptables -A udp-flood -j DROP
 ```
 
+##### Port Forwarding
+Route traffic from incoming port to destination service port.
+
+E.g. Connections coming in on ppp0 on port 8001 to be routed to 192.168.1.200 on eth0 on port 8080.
+
+1. Checking current server allow forwarding or not.
+    ```
+    # cat /proc/sys/net/ipv4/conf/ppp0/forwarding
+    # cat /proc/sys/net/ipv4/conf/eth0/forwarding
+    ```
+
+2. If they are not return `1`. Then run below command to enable it.
+    ```
+    # echo '1' | tee /proc/sys/net/ipv4/conf/ppp0/forwarding
+    # echo '1' | tee /proc/sys/net/ipv4/conf/eth0/forwarding
+    ```
+
+3. Apply below rules.
+    ```
+    # iptables -A FORWARD -m state -p tcp -d 192.168.1.200 --dport 8080 --state NEW,ESTABLISHED,RELATED -j ACCEPT
+    # iptables -t nat -A PREROUTING -p tcp --dport 8001 -j DNAT --to-destination 192.168.1.200:8080
+    ```
+
+    For apply on `nat` table only.
+    ```
+    # iptables -t nat -A PREROUTING -p tcp -i ppp0 --dport 8001 -j DNAT --to-destination 192.168.1.200:8080
+    # iptables -A FORWARD -p tcp -d 192.168.1.200 --dport 8080 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+    ```
+
 ##### Reference Links
 * http://www.cyberciti.biz/faq/iptables-block-port/
 * http://www.cyberciti.biz/faq/linux-iptables-drop/
 * http://security.stackexchange.com/questions/31981/how-can-i-reject-connection-from-lan-and-wan-to-some-ports
 * http://blog.thoward37.me/articles/code-snippet-iptables-settings-to-prevent-udp-floods/
+* https://serverfault.com/questions/140622/how-can-i-port-forward-with-iptables
