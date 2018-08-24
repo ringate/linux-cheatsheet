@@ -39,6 +39,7 @@ $ apt-cache showpkg vsftpd
 
 ##### Find package name and description
 ```
+$ apt-cache pkgnames | grep php7.1
 $ apt-cache search php7
 $ apt-cache search mp3 convert
 ```
