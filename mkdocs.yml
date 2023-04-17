@@ -1,3 +1,7 @@
 site_name: Linux Cheatsheet
+theme:
+    name: mkdocs
+    highlightjs: true
+    nav_style: dark
 nav:
     - Linux Commands: 'index.md'
