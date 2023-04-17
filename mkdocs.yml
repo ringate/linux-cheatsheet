@@ -1,7 +1,19 @@
 site_name: Linux Cheatsheet
 theme:
-    name: mkdocs
+    name: readthedocs
     highlightjs: true
     nav_style: dark
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        # See: https://mkdocstrings.github.io/python/usage/
+        python:
+          options:
+            docstring_style: sphinx
+markdown_extensions:
+  - markdown_include.include:
+      base_path: .
+  - admonition
 nav:
     - Linux Commands: 'index.md'
